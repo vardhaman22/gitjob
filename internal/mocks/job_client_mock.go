@@ -12,6 +12,9 @@ import (
 	v10 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
+	generic "github.com/rancher/wrangler/pkg/generic"
+	"k8s.io/client-go/rest"
+	batchv1 "k8s.io/api/batch/v1"
 )
 
 // MockJobClient is a mock of JobClient interface.
@@ -159,4 +162,19 @@ func (m *MockJobClient) Watch(arg0 string, arg1 v10.ListOptions) (watch.Interfac
 func (mr *MockJobClientMockRecorder) Watch(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Watch", reflect.TypeOf((*MockJobClient)(nil).Watch), arg0, arg1)
+}
+
+
+func (m *MockJobClient) WithImpersonation(arg0 rest.ImpersonationConfig) (generic.ClientInterface[*batchv1.Job,*batchv1.JobList], error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "WithImpersonation", arg0)
+	ret0, _ := ret[0].(generic.ClientInterface[*batchv1.Job,*batchv1.JobList])
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Watch indicates an expected call of Watch.
+func (mr *MockJobClientMockRecorder) WithImpersonation(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Watch", reflect.TypeOf((*MockJobClient)(nil).Watch), arg0)
 }

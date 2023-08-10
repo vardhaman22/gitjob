@@ -18,7 +18,6 @@ import (
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/rest"
-	batchv1 "k8s.io/api/batch/v1"
 )
 
 // MockGitJobController is a mock of GitJobController interface.
@@ -199,14 +198,6 @@ func (m *MockGitJobController) OnChange(arg0 context.Context, arg1 string,arg2 g
 	m.ctrl.Call(m, "OnChange", arg0, arg1, arg2)
 }
 
-func (m *MockGitJobController) WithImpersonation(arg0 rest.ImpersonationConfig) (generic.ClientInterface[*v1.GitJob,*v1.GitJobList], error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "WithImpersonation", arg0)
-	ret0, _ := ret[0].(generic.ClientInterface[*v1.GitJob,*v1.GitJobList])
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
 // OnChange indicates an expected call of OnChange.
 func (mr *MockGitJobControllerMockRecorder) OnChange(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
@@ -304,10 +295,15 @@ func (mr *MockGitJobControllerMockRecorder) Watch(arg0, arg1 interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Watch", reflect.TypeOf((*MockGitJobController)(nil).Watch), arg0, arg1)
 }
 
-func (m *MockJobClient) WithImpersonation(arg0 rest.ImpersonationConfig) (generic.ClientInterface[*batchv1.Job,*batchv1.JobList], error) {
+func (m *MockGitJobController) WithImpersonation(arg0 rest.ImpersonationConfig) (generic.ClientInterface[*v1.GitJob,*v1.GitJobList], error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "WithImpersonation", arg0)
-	ret0, _ := ret[0].(generic.ClientInterface[*batchv1.Job,*batchv1.JobList])
+	ret0, _ := ret[0].(generic.ClientInterface[*v1.GitJob,*v1.GitJobList])
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
+}
+
+func (mr *MockGitJobControllerMockRecorder) WithImpersonation(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WithImpersonation", reflect.TypeOf((*MockGitJobController)(nil).WithImpersonation), arg0)
 }
