@@ -11,13 +11,14 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	v1 "github.com/rancher/gitjob/pkg/apis/gitjob.cattle.io/v1"
-	v10 "github.com/rancher/gitjob/pkg/generated/controllers/gitjob.cattle.io/v1"
 	generic "github.com/rancher/wrangler/pkg/generic"
 	v11 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
+	"k8s.io/client-go/rest"
+	batchv1 "k8s.io/api/batch/v1"
 )
 
 // MockGitJobController is a mock of GitJobController interface.
@@ -68,10 +69,10 @@ func (mr *MockGitJobControllerMockRecorder) AddGenericRemoveHandler(arg0, arg1, 
 }
 
 // Cache mocks base method.
-func (m *MockGitJobController) Cache() v10.GitJobCache {
+func (m *MockGitJobController) Cache() generic.CacheInterface[*v1.GitJob] {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Cache")
-	ret0, _ := ret[0].(v10.GitJobCache)
+	ret0, _ := ret[0].(generic.CacheInterface[*v1.GitJob])
 	return ret0
 }
 
@@ -193,9 +194,17 @@ func (mr *MockGitJobControllerMockRecorder) List(arg0, arg1 interface{}) *gomock
 }
 
 // OnChange mocks base method.
-func (m *MockGitJobController) OnChange(arg0 context.Context, arg1 string, arg2 v10.GitJobHandler) {
+func (m *MockGitJobController) OnChange(arg0 context.Context, arg1 string,arg2 generic.ObjectHandler[*v1.GitJob]) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "OnChange", arg0, arg1, arg2)
+}
+
+func (m *MockGitJobController) WithImpersonation(arg0 rest.ImpersonationConfig) (generic.ClientInterface[*v1.GitJob,*v1.GitJobList], error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "WithImpersonation", arg0)
+	ret0, _ := ret[0].(generic.ClientInterface[*v1.GitJob,*v1.GitJobList])
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // OnChange indicates an expected call of OnChange.
@@ -205,9 +214,9 @@ func (mr *MockGitJobControllerMockRecorder) OnChange(arg0, arg1, arg2 interface{
 }
 
 // OnRemove mocks base method.
-func (m *MockGitJobController) OnRemove(arg0 context.Context, arg1 string, arg2 v10.GitJobHandler) {
+func (m *MockGitJobController) OnRemove(arg0 context.Context, arg1 string,arg2 generic.ObjectHandler[*v1.GitJob]) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "OnRemove", arg0, arg1, arg2)
+	m.ctrl.Call(m, "OnRemove", arg0, arg1,arg2)
 }
 
 // OnRemove indicates an expected call of OnRemove.
@@ -293,4 +302,12 @@ func (m *MockGitJobController) Watch(arg0 string, arg1 v11.ListOptions) (watch.I
 func (mr *MockGitJobControllerMockRecorder) Watch(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Watch", reflect.TypeOf((*MockGitJobController)(nil).Watch), arg0, arg1)
+}
+
+func (m *MockJobClient) WithImpersonation(arg0 rest.ImpersonationConfig) (generic.ClientInterface[*batchv1.Job,*batchv1.JobList], error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "WithImpersonation", arg0)
+	ret0, _ := ret[0].(generic.ClientInterface[*batchv1.Job,*batchv1.JobList])
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
